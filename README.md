@@ -1,4 +1,4 @@
-# Full Stack Open - University of Helsinki - 2022/2023
+# Full Stack Open Course - University of Helsinki - 2022/2023
 
 ## About the course
 
