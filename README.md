@@ -13,7 +13,7 @@ Within this repository, you'll find my personal solutions to exercises from the 
 
 ## Course Parts
 
-### Part 10: Fundamentals of Web apps
+### Part 0: Fundamentals of Web apps
 
 ### Part 1: Introduction to React
 
