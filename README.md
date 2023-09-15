@@ -13,7 +13,9 @@ Within this repository, you'll find my personal solutions to exercises from the 
 
 ## Course Parts
 
-### Part 1: Fundamentals of Web apps (Introduction to React)
+### Part 10: Fundamentals of Web apps
+
+### Part 1: Introduction to React
 
 ### Part 2: Communicating with server (Programming a server with NodeJS and Express)
 
