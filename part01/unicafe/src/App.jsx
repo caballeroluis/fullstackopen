@@ -1,8 +1,33 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
+const Statistics = ({ comments }) => {
+  const averageScore = () => {
+    if (comments.length === 0) {
+      return 0
+    }
+    const totalScore = comments.reduce((acc, score) => acc + score, 0)
+    return totalScore / comments.length
+  }
+
+  const positivePercentage = () => {
+    if (comments.length === 0) {
+      return 0
+    }
+    const positiveCount = comments.filter((score) => score === 1).length
+    return (positiveCount / comments.length) * 100
+  }
+
+  return (
+    <div>
+      <p>average {averageScore()}</p>
+      <p>positive {positivePercentage()}%</p>
+    </div>
+  )
+}
+
 const App = () => {
-    // save clicks of each button to its own state
+  // save clicks of each button to its own state
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
@@ -23,22 +48,6 @@ const App = () => {
     setComments([...comments, -1])
   }
 
-  const averageScore = () => {
-    if (comments.length === 0) {
-      return 0
-    }
-    const totalScore = comments.reduce((acc, score) => acc + score, 0)
-    return totalScore / comments.length
-  }
-
-  const positivePercentage = () => {
-    if (comments.length === 0) {
-      return 0
-    }
-    const positiveCount = comments.filter((score) => score === 1).length
-    return (positiveCount / comments.length) * 100
-  }
-
   return (
     <div>
       <h1>give feedback</h1>
@@ -53,8 +62,7 @@ const App = () => {
       <p>neutral {neutral}</p>
       <p>bad {bad}</p>
       <p>all {comments.length}</p>
-      <p>average {averageScore()}</p>
-      <p>positive {positivePercentage()}%</p>
+      <Statistics comments={comments} />
     </div>
   )
 }
