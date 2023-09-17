@@ -1,27 +1,29 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
-const Statistics = ({ comments }) => {
-  const averageScore = () => {
-    if (comments.length === 0) {
-      return 0
-    }
-    const totalScore = comments.reduce((acc, score) => acc + score, 0)
-    return totalScore / comments.length
-  }
+const Button = ({ text, onClick }) => (
+  <button onClick={onClick}>{text}</button>
+)
 
-  const positivePercentage = () => {
-    if (comments.length === 0) {
-      return 0
-    }
-    const positiveCount = comments.filter((score) => score === 1).length
-    return (positiveCount / comments.length) * 100
-  }
+const StatisticLine = ({ text, value }) => (
+  <p>
+    {text} {value}
+  </p>
+)
+
+const Statistics = ({ good, neutral, bad }) => {
+  const all = good + neutral + bad
+  const average = (good - bad) / all || 0
+  const positivePercentage = (good / all) * 100 || 0
 
   return (
     <div>
-      <p>average {averageScore()}</p>
-      <p>positive {positivePercentage()}%</p>
+      <StatisticLine text="good" value={good} />
+      <StatisticLine text="neutral" value={neutral} />
+      <StatisticLine text="bad" value={bad} />
+      <StatisticLine text="all" value={all} />
+      <StatisticLine text="average" value={average} />
+      <StatisticLine text="positive" value={`${positivePercentage}%`} />
     </div>
   )
 }
@@ -31,42 +33,20 @@ const App = () => {
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
-  const [comments, setComments] = useState([])
-
-  const handleGoodClick = () => {
-    setGood(good + 1)
-    setComments([...comments, 1])
-  }
-
-  const handleNeutralClick = () => {
-    setNeutral(neutral + 1)
-    setComments([...comments, 0])
-  }
-
-  const handleBadClick = () => {
-    setBad(bad + 1)
-    setComments([...comments, -1])
-  }
+  const handleGoodClick = () => setGood(good + 1)
+  const handleNeutralClick = () => setNeutral(neutral + 1)
+  const handleBadClick = () => setBad(bad + 1)
 
   return (
     <div>
       <h1>give feedback</h1>
-
-      <button onClick={handleGoodClick}>good</button>
-      <button onClick={handleNeutralClick}>neutral</button>
-      <button onClick={handleBadClick}>bad</button>
+      <Button text="good" onClick={handleGoodClick} />
+      <Button text="neutral" onClick={handleNeutralClick} />
+      <Button text="bad" onClick={handleBadClick} />
 
       <h1>statistics</h1>
-      
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
-      <p>all {comments.length}</p>
-
-      {comments.length > 0 ? (
-        <div>
-          <Statistics comments={comments} />
-        </div>
+      {good || neutral || bad ? (
+        <Statistics good={good} neutral={neutral} bad={bad} />
       ) : (
         <p>No feedback given yet.</p>
       )}
