@@ -62,7 +62,14 @@ const App = () => {
       <p>neutral {neutral}</p>
       <p>bad {bad}</p>
       <p>all {comments.length}</p>
-      <Statistics comments={comments} />
+
+      {comments.length > 0 ? (
+        <div>
+          <Statistics comments={comments} />
+        </div>
+      ) : (
+        <p>No feedback given yet.</p>
+      )}
     </div>
   )
 }
