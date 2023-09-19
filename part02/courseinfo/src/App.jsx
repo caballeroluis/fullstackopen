@@ -27,9 +27,12 @@ const Part = (props) => {
 }
 
 const Total = (props) => {
-  return (
-    <p>Number of exercises {props.course.parts[0].exercises + props.course.parts[1].exercises + props.course.parts[2].exercises}</p>
-  )
+  const totalExercises = props.course.parts.reduce(
+    (s, p) => s + p.exercises,
+    0
+  );
+
+  return <p>Number of exercises {totalExercises}</p> ;
 }
 
 const App = () => {
