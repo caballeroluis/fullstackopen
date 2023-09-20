@@ -38,9 +38,14 @@ const App = () => {
       alert(`"${newNumber}" is already added to numberbook`)
     } else {
       const newPerson = { name: newName, number: newNumber }
-      setPersons(persons.concat(newPerson))
-      setNewName('')
-      setNewNumber('')
+      personService.create(newPerson).then(() => {
+        setPersons(persons.concat(newPerson))
+        setNewName('')
+        setNewNumber('')
+      }).catch((error) => {
+        alert(`Error. "${newName}" and "${newNumber}" was not saved`)
+        console.log(error)
+      })
     }
   }
 
