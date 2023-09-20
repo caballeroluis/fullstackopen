@@ -1,0 +1,20 @@
+.App {
+  font-family: Arial, sans-serif;
+  margin-top: 20px;
+}
+
+input {
+  padding: 8px;
+  font-size: 16px;
+}
+
+button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  text-decoration: underline;
+}
