@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import Finder from './components/Finder'
+import Countries from './components/Countries'
+import Country from './components/Country'
+import CountryService from './services/CountryService'
+import WeatherService from './services/WeatherService'
 
 const App = () => {
   const [countries, setCountries] = useState([])
   const [filter, setFilter] = useState('')
   const [filteredCountries, setFilteredCountries] = useState([])
   const [countryDetails, setCountryDetails] = useState(null)
+  const [weatherData, setWeatherData] = useState(null)
 
   useEffect(() => {
-    axios
-      .get('https://restcountries.com/v3.1/all')
-      .then((response) => {
-        setCountries(response.data)
-      })
+    CountryService.getCountries()
+      .then((data) => setCountries(data))
       .catch((error) => {
         console.error('Error fetching countries:', error)
       })
@@ -34,56 +36,41 @@ const App = () => {
     setFilter(event.target.value)
   }
 
-  const renderCountryDetails = (country) => {
-    return (
-      <div>
-        <h2>{country.name.common}</h2>
-        <p>capital {country.capital}</p>
-        <p>area {country.area}</p>
-        <h4>languages</h4>
-        <ul>
-          {Object.values(country.languages).map((language, index) => (
-            <li key={index}>{language}</li>
-          ))}
-        </ul>
-        <img
-          src={country.flags.png}
-          alt={`Flag of ${country.name.common}`}
-          border="1px solid gray"
-        />
-      </div>
-    )
-  }
-
   const handleShowDetails = (country) => {
     setCountryDetails(country)
+    fetchWeatherData(country.capital)
+  }
+
+  const fetchWeatherData = (capital) => {
+    const apiKey = import.meta.env.VITE_REACT_APP_OPENWEATHERMAP_API_KEY
+    if (!apiKey) {
+      console.error('OpenWeatherMap API key is missing.')
+      return
+    }
+
+    WeatherService.getWeatherData(capital, apiKey)
+      .then((data) => setWeatherData(data))
+      .catch((error) => {
+        console.error('Error fetching weather data:', error)
+      })
   }
 
   return (
     <div>
-      <div>
-        <label htmlFor="search">Search: </label>
-        <input
-          type="text"
-          id="search"
-          value={filter}
-          onChange={handleFilterChange}
-        />
-      </div>
+      <Finder
+        filter={filter}
+        onFilterChange={handleFilterChange}
+      />
       <div>
         {filteredCountries.length > 10 ? (
           <p>Too many matches, specify another filter</p>
         ) : countryDetails ? (
-          renderCountryDetails(countryDetails)
+          <Country country={countryDetails} weatherData={weatherData} />
         ) : (
-          <ul>
-            {filteredCountries.map((country) => (
-              <li key={country.name.common}>
-                {country.name.common}
-                <button onClick={() => handleShowDetails(country)}>show</button>
-              </li>
-            ))}
-          </ul>
+          <Countries
+            filteredCountries={filteredCountries}
+            onCountryClick={handleShowDetails}
+          />
         )}
       </div>
     </div>
