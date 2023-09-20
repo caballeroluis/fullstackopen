@@ -45,22 +45,43 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
-
-    if (persons.some((person) => person.name === newName)) {
-      alert(`"${newName}" is already added to numberbook`)
-    } else if (persons.some((person) => person.number === newNumber)) {
-      alert(`"${newNumber}" is already added to numberbook`)
+  
+    const existingPerson = persons.find((person) => person.name === newName)
+  
+    if (existingPerson) {
+      const confirmUpdate = window.confirm(
+        `"${newName}" is already in the phonebook, replace the old number with a new one?`
+      )
+  
+      if (confirmUpdate) {
+        const updatedPerson = { ...existingPerson, number: newNumber }
+  
+        PersonService.update(existingPerson, updatedPerson)
+          .then(() => {
+            setPersons(
+              persons.map((person) =>
+                person.id === updatedPerson.id ? updatedPerson : person
+              )
+            )
+            setNewName('')
+            setNewNumber('')
+          })
+          .catch((error) => {
+            alert(`Error updating ${newName}'s number`)
+            console.error(error)
+          })
+      }
     } else {
       const newPerson = { name: newName, number: newNumber, id: makeNewId(persons) }
       PersonService.create(newPerson).then(() => {
-        setPersons(persons.concat(newPerson))
-        setNewName('')
-        setNewNumber('')
-      }).catch((error) => {
-        alert(`Error. "${newName}" and "${newNumber}" was not saved`)
-        console.log("Error when adding person", error)
-      })
-    }
+          setPersons(persons.concat(newPerson))
+          setNewName('')
+          setNewNumber('')
+        }).catch((error) => {
+          alert(`Error. "${newName}" and "${newNumber}" was not saved`)
+          console.log("Error when adding person", error)
+        })
+      }
   }
 
   const handleDelete = (person) => {
