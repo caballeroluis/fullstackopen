@@ -74,7 +74,10 @@ const App = () => {
             setNewNumber('')
           })
           .catch((error) => {
-            alert(`Error updating ${newName}'s number`)
+            setNotificationMessage(`Error updating ${newName}'s number`)
+            setTimeout(() => {
+              setNotificationMessage('')
+            }, 3000)
             console.error(error)
           })
       }
@@ -89,7 +92,10 @@ const App = () => {
           setNewName('')
           setNewNumber('')
         }).catch((error) => {
-          alert(`Error. "${newName}" and "${newNumber}" was not saved`)
+          setNotificationMessage(`Error. "${newName}" and "${newNumber}" was not saved`)
+          setTimeout(() => {
+            setNotificationMessage('')
+          }, 3000)
           console.log("Error when adding person", error)
         })
       }
@@ -107,7 +113,10 @@ const App = () => {
           }, 3000)
         })
         .catch((error) => {
-          alert(`Error "${person.name}" was not deleted`)
+          setNotificationMessage(`Error "${person.name}" was not deleted`)
+          setTimeout(() => {
+            setNotificationMessage('')
+          }, 3000)
           console.error(`Error when deleting person "${person.name}"`, error)
         })
     }
@@ -115,8 +124,8 @@ const App = () => {
 
   return (
     <div>
-      {notificationMessage && <Notification notificationMessage={notificationMessage} />}
       <h2>Phonebook</h2>
+      {notificationMessage && <Notification notificationMessage={notificationMessage} />}
       <Filter filterName={filterName} handleFilterNameChange={handleFilterNameChange} />
       <h3>Add a New Person</h3>
       <PersonForm
