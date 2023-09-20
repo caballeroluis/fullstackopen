@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Filter from './components/Filter.jsx'
 import PersonForm from './components/PersonForm.jsx'
 import Persons from './components/Persons.jsx'
-import personService from './services/personService.jsx'
+import PersonService from './services/PersonService.jsx'
 
 const App = () => {
   
@@ -12,7 +12,7 @@ const App = () => {
   const [ filterName, setFilterName ] = useState('')
   
   useEffect(() => {
-    personService.getAll().then((initialPersons) => {
+    PersonService.getAll().then((initialPersons) => {
       setPersons(initialPersons)
     })
   }, [])
@@ -38,7 +38,7 @@ const App = () => {
       alert(`"${newNumber}" is already added to numberbook`)
     } else {
       const newPerson = { name: newName, number: newNumber }
-      personService.create(newPerson).then(() => {
+      PersonService.create(newPerson).then(() => {
         setPersons(persons.concat(newPerson))
         setNewName('')
         setNewNumber('')
