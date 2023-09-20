@@ -29,6 +29,20 @@ const App = () => {
     setFilterName(event.target.value)
   }
 
+  function makeNewId(collection) {
+    let highestId = -1
+    let itemWithHighestId = null
+  
+    for (const item of collection) {
+      if (item.id > highestId) {
+        highestId = item.id
+        itemWithHighestId = item
+      }
+    }
+  
+    return itemWithHighestId.id + 1
+  }
+
   const addPerson = (event) => {
     event.preventDefault()
 
@@ -37,15 +51,29 @@ const App = () => {
     } else if (persons.some((person) => person.number === newNumber)) {
       alert(`"${newNumber}" is already added to numberbook`)
     } else {
-      const newPerson = { name: newName, number: newNumber }
+      const newPerson = { name: newName, number: newNumber, id: makeNewId(persons) }
       PersonService.create(newPerson).then(() => {
         setPersons(persons.concat(newPerson))
         setNewName('')
         setNewNumber('')
       }).catch((error) => {
         alert(`Error. "${newName}" and "${newNumber}" was not saved`)
-        console.log(error)
+        console.log("Error when adding person", error)
       })
+    }
+  }
+
+  const handleDelete = (person) => {
+    const confirmed = window.confirm(`Delete "${person.name}"?`)
+    if (confirmed) {
+      PersonService.remove(person)
+        .then(() => {
+          setPersons(persons.filter((_person) => _person.id !== person.id))
+        })
+        .catch((error) => {
+          alert(`Error "${person.name}" was not deleted`)
+          console.error(`Error when deleting person "${person.name}"`, error)
+        })
     }
   }
 
@@ -62,7 +90,7 @@ const App = () => {
         addPerson={addPerson}
       />
       <h2>Numbers</h2>
-      <Persons persons={persons} filterName={filterName} />
+      <Persons persons={persons} filterName={filterName} onDelete={handleDelete} />
     </div>
   )
 }

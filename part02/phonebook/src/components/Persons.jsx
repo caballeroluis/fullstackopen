@@ -1,18 +1,16 @@
 import Person from './Person'
 
-const Persons = ({ persons, filterName }) => {
+const Persons = ({ persons, filterName, onDelete }) => {
   const filteredPersonsByName = persons.filter((person) =>
     person.name?.toLowerCase().includes(filterName?.toLowerCase())
   )
 
   return (
-    <ul>
+    <div>
       {filteredPersonsByName.map((person, index) => (
-        <li key={index}>
-          <Person person={person} />
-        </li>
+        <Person person={person} onDelete={onDelete} key={index} />
       ))}
-    </ul>
+    </div>
   )
 }
 
