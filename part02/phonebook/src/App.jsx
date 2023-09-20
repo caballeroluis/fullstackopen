@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Filter from './components/Filter.jsx'
 import PersonForm from './components/PersonForm.jsx'
 import Persons from './components/Persons.jsx'
+import Notification from './components/Notification.jsx'
 import PersonService from './services/PersonService.jsx'
 
 const App = () => {
@@ -10,6 +11,8 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ filterName, setFilterName ] = useState('')
+  const [ notificationMessage, setNotificationMessage ] = useState('')
+  
   
   useEffect(() => {
     PersonService.getAll().then((initialPersons) => {
@@ -63,6 +66,10 @@ const App = () => {
                 person.id === updatedPerson.id ? updatedPerson : person
               )
             )
+            setNotificationMessage(`Updated "${newName}"`)
+            setTimeout(() => {
+              setNotificationMessage('')
+            }, 3000)
             setNewName('')
             setNewNumber('')
           })
@@ -75,6 +82,10 @@ const App = () => {
       const newPerson = { name: newName, number: newNumber, id: makeNewId(persons) }
       PersonService.create(newPerson).then(() => {
           setPersons(persons.concat(newPerson))
+          setNotificationMessage(`Added "${newName}"`)
+          setTimeout(() => {
+            setNotificationMessage('')
+          }, 3000)
           setNewName('')
           setNewNumber('')
         }).catch((error) => {
@@ -90,6 +101,10 @@ const App = () => {
       PersonService.remove(person)
         .then(() => {
           setPersons(persons.filter((_person) => _person.id !== person.id))
+          setNotificationMessage(`Deleted "${person.name}"`)
+          setTimeout(() => {
+            setNotificationMessage('')
+          }, 3000)
         })
         .catch((error) => {
           alert(`Error "${person.name}" was not deleted`)
@@ -100,6 +115,7 @@ const App = () => {
 
   return (
     <div>
+      {notificationMessage && <Notification notificationMessage={notificationMessage} />}
       <h2>Phonebook</h2>
       <Filter filterName={filterName} handleFilterNameChange={handleFilterNameChange} />
       <h3>Add a New Person</h3>
