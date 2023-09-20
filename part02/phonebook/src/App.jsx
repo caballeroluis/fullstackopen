@@ -1,20 +1,22 @@
-import React, { useState } from 'react'
-import Filter from './Filter.jsx'
-import PersonForm from './PersonForm.jsx'
-import Persons from './Persons.jsx'
+import React, { useState, useEffect } from 'react'
+import Filter from './components/Filter.jsx'
+import PersonForm from './components/PersonForm.jsx'
+import Persons from './components/Persons.jsx'
+import personService from './services/personService.jsx'
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' }
-  ])
-
+  
+  const [ persons, setPersons ] = useState([])
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ filterName, setFilterName ] = useState('')
-
+  
+  useEffect(() => {
+    personService.getAll().then((initialPersons) => {
+      setPersons(initialPersons)
+    })
+  }, [])
+  
   const handleNameChange = (event) => {
     setNewName(event.target.value)
   }
@@ -36,7 +38,7 @@ const App = () => {
       alert(`"${newNumber}" is already added to numberbook`)
     } else {
       const newPerson = { name: newName, number: newNumber }
-      setPersons([...persons, newPerson])
+      setPersons(persons.concat(newPerson))
       setNewName('')
       setNewNumber('')
     }

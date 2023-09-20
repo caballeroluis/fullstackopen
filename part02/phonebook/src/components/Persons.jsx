@@ -2,7 +2,7 @@ import Person from './Person'
 
 const Persons = ({ persons, filterName }) => {
   const filteredPersonsByName = persons.filter((person) =>
-    person.name.toLowerCase().includes(filterName.toLowerCase())
+    person.name?.toLowerCase().includes(filterName?.toLowerCase())
   )
 
   return (

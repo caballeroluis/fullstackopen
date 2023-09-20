@@ -30,8 +30,8 @@ const Part = (props) => {
         {props.part} {props.exercises}
       </p>
     </div>
-  );
-};
+  )
+}
 
 const App = () => {
   const course = {
