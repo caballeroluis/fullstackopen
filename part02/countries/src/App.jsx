@@ -55,13 +55,9 @@ const App = () => {
     )
   }
 
-  useEffect(() => {
-    if (filteredCountries.length === 1) {
-      setCountryDetails(filteredCountries[0])
-    } else {
-      setCountryDetails(null)
-    }
-  }, [filteredCountries])
+  const handleShowDetails = (country) => {
+    setCountryDetails(country)
+  }
 
   return (
     <div>
@@ -82,7 +78,10 @@ const App = () => {
         ) : (
           <ul>
             {filteredCountries.map((country) => (
-              <li key={country.name.common}>{country.name.common}</li>
+              <li key={country.name.common}>
+                {country.name.common}
+                <button onClick={() => handleShowDetails(country)}>show</button>
+              </li>
             ))}
           </ul>
         )}
