@@ -41,26 +41,6 @@ app.get('/api/persons/:id', (req, res) => {
   res.json(person);
 });
 
-app.post('/api/persons', (req, res) => {
-  const body = req.body;
-
-  if (!body.name || !body.number) {
-    return res.status(400).json({ error: 'Name or number missing' });
-  }
-
-  const id = Math.floor(Math.random() * 99999999);
-
-  const newPerson = {
-    id: id,
-    name: body.name,
-    number: body.number,
-  };
-
-  persons.push(newPerson);
-
-  res.json(newPerson);
-});
-
 app.delete('/api/persons/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const index = persons.findIndex((p) => p.id === id);
@@ -72,6 +52,31 @@ app.delete('/api/persons/:id', (req, res) => {
   persons.splice(index, 1);
 
   res.status(204).end();
+});
+
+app.post('/api/persons', (req, res) => {
+  const body = req.body;
+
+  if (!body.name || !body.number) {
+    return res.status(400).json({ error: 'Name or number missing' });
+  }
+
+  const nameExists = persons.some((p) => p.name === body.name);
+  if (nameExists) {
+    return res.status(400).json({ error: 'Name must be unique' });
+  }
+
+  const id = Math.floor(Math.random() * 10000);
+
+  const newPerson = {
+    id: id,
+    name: body.name,
+    number: body.number,
+  };
+
+  persons.push(newPerson);
+
+  res.json(newPerson);
 });
 
 app.get('/info', (req, res) => {
