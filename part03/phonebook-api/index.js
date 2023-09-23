@@ -41,6 +41,19 @@ app.get('/api/persons/:id', (req, res) => {
   res.json(person);
 });
 
+app.delete('/api/persons/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const index = persons.findIndex((p) => p.id === id);
+
+  if (index === -1) {
+    return res.status(404).json({ error: 'Person not found' });
+  }
+
+  persons.splice(index, 1);
+
+  res.status(204).end();
+});
+
 app.get('/info', (req, res) => {
   const currentTime = new Date();
   const personCount = persons.length;
