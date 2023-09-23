@@ -4,7 +4,16 @@ const morgan = require('morgan');
 
 app.use(express.json());
 app.use(morgan('tiny'));
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :postData'));
+app.use(express.json());
 
+morgan.token('postData', (req, res) => {
+  if (req.method === 'POST' || req.method === 'PUT') {
+    return JSON.stringify(req.body);
+  } else {
+    return '';
+  }
+});
 
 const persons = [
   {
