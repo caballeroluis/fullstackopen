@@ -1,11 +1,13 @@
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
+const cors = require('cors');
 
 app.use(express.json());
 app.use(morgan('tiny'));
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :postData'));
 app.use(express.json());
+app.use(cors());
 
 morgan.token('postData', (req, res) => {
   if (req.method === 'POST' || req.method === 'PUT') {
