@@ -32,20 +32,6 @@ const App = () => {
     setFilterName(event.target.value)
   }
 
-  function makeNewId(collection) {
-    let highestId = -1
-    let itemWithHighestId = null
-  
-    for (const item of collection) {
-      if (item.id > highestId) {
-        highestId = item.id
-        itemWithHighestId = item
-      }
-    }
-  
-    return itemWithHighestId.id + 1
-  }
-
   const addPerson = (event) => {
     event.preventDefault()
   
@@ -59,7 +45,7 @@ const App = () => {
       if (confirmUpdate) {
         const updatedPerson = { ...existingPerson, number: newNumber }
   
-        PersonService.update(existingPerson, updatedPerson)
+        PersonService.update(existingPerson)
           .then(() => {
             setPersons(
               persons.map((person) =>
@@ -82,9 +68,9 @@ const App = () => {
           })
       }
     } else {
-      const newPerson = { name: newName, number: newNumber, id: makeNewId(persons) }
-      PersonService.create(newPerson).then(() => {
-          setPersons(persons.concat(newPerson))
+      const newPerson = { name: newName, number: newNumber }
+      PersonService.create(newPerson).then((response) => {
+          setPersons(persons.concat(response))
           setNotificationMessage(`Added "${newName}"`)
           setTimeout(() => {
             setNotificationMessage('')
@@ -125,7 +111,6 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      {notificationMessage && <Notification notificationMessage={notificationMessage} />}
       <Filter filterName={filterName} handleFilterNameChange={handleFilterNameChange} />
       <h3>Add a New Person</h3>
       <PersonForm
@@ -137,6 +122,7 @@ const App = () => {
       />
       <h2>Numbers</h2>
       <Persons persons={persons} filterName={filterName} onDelete={handleDelete} />
+      {notificationMessage && <Notification notificationMessage={notificationMessage} />}
     </div>
   )
 }
