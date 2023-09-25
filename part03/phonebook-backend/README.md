@@ -76,3 +76,23 @@ npm run dev
 visit: [http://http://localhost:3001](https://http://localhost:3001)
 
 ![image](https://github.com/caballeroluis/fullstackopen/assets/111797757/7388bfb7-01f3-46d4-bdaa-306796ab04ec)
+
+
+# Exercice 3.12: Command-line database
+
+Create a cloud-based MongoDB database for the phonebook application with MongoDB Atlas.
+
+Create a mongo.js file in the project directory, that can be used for adding entries to the phonebook, and for listing all of the existing entries in the phonebook.
+
+My console:
+
+```
+$ node mongo.js **** Anna 040-1234556
+added Anna number 040-1234556 to phonebook
+```
+
+```
+$ node mongo.js ****
+phonebook:
+Anna 040-1234556
+```
