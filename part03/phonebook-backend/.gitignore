@@ -128,5 +128,3 @@ out
 .yarn/install-state.gz
 .pnp.*
 
-# fly.io
-fly.toml

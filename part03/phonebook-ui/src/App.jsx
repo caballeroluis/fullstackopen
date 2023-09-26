@@ -78,7 +78,7 @@ const App = () => {
           setNewName('')
           setNewNumber('')
         }).catch((error) => {
-          setNotificationMessage(`Error. "${newName}" and "${newNumber}" was not saved`)
+          setNotificationMessage(`Error. "${newName}" and "${newNumber}" was not saved. ${error.response.data.error}`)
           setTimeout(() => {
             setNotificationMessage('')
           }, 3000)

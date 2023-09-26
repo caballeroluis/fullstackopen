@@ -17,8 +17,14 @@ const remove = (person) => {
 }
 
 const update = (existingPerson, updatedPerson) => {
-  const request = axios.put(`${baseUrl}/persons/${existingPerson.id}`, updatedPerson)
-  return request.then((response) => response.data)
-}
+  const request = axios.put(
+    `${baseUrl}/persons/${existingPerson.id}`,
+    updatedPerson,
+    {
+      runValidators: true,
+    }
+  );
+  return request.then((response) => response.data);
+};
 
 export default { getAll, create, remove, update }

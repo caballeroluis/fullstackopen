@@ -136,3 +136,17 @@ Also update the handling of the api/persons/:id and info routes to use the datab
 Inspecting an individual phonebook entry from the browser should look like this:
 
 ![image](https://github.com/caballeroluis/fullstackopen/assets/111797757/61a19b93-6950-4098-b7ad-7f6e0a8d1080)
+
+
+# Exercice 3.19*: Phonebook database, step7
+
+Expand the validation so that the name stored in the database has to be at least three characters long.
+
+Expand the frontend so that it displays some form of error message when a validation error occurs. Error handling can be implemented by adding a catch block
+
+You can display the default error message returned by Mongoose, even though they are not as readable
+
+![image](https://github.com/caballeroluis/fullstackopen/assets/111797757/f794669c-7dc3-451e-8395-9785a8c8da6d)
+
+
+![image](https://github.com/caballeroluis/fullstackopen/assets/111797757/f2bcf894-e48c-4500-b6c8-b9ec44331d53)
