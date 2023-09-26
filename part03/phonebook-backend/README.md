@@ -113,3 +113,10 @@ Change the backend so that new numbers are saved to the database. Verify that yo
 At this stage, ~~you can ignore whether there is already a person in the database with the same name as the person you are adding.~~
 
 ![image](https://github.com/caballeroluis/fullstackopen/assets/111797757/72508941-6894-46eb-b0fa-059303ec3f59)
+
+
+# Exercice 3.15: Phonebook database, step3
+
+Change the backend so that deleting phonebook entries is reflected in the database.
+
+Verify that the frontend still works after making the changes.
