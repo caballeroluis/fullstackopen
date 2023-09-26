@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 require('dotenv').config();
 const Person = require('./models/person');
+const errorHandler = require('./middleware/errorHandler');
 
 app.use(express.json());
 app.use(morgan('tiny'));
@@ -21,13 +22,15 @@ morgan.token('postData', (req, res) => {
 });
 
 
-app.get('/api/persons', (request, response) => {
-  Person.find({}).then(persons => {
-    response.json(persons);
-  });
+app.get('/api/persons', (request, response, next) => {
+  Person.find({})
+    .then(persons => {
+      response.json(persons);
+    })
+    .catch(error => next(error));
 });
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
   const id = request.params.id;
   Person.findById(id)
     .then(person => {
@@ -37,25 +40,19 @@ app.get('/api/persons/:id', (request, response) => {
         response.status(404).json({ error: 'Person not found' });
       }
     })
-    .catch(error => {
-      console.log(error);
-      response.status(500).json({ error: 'Internal Server Error' });
-    });
+    .catch(error => next(error));
 });
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
   const id = request.params.id;
   Person.findByIdAndRemove(id)
     .then(() => {
       response.status(204).end();
     })
-    .catch(error => {
-      console.log(error);
-      response.status(500).json({ error: 'Internal Server Error' });
-    });
+    .catch(error => next(error));
 });
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   const body = request.body;
 
   if (!body.name || !body.number) {
@@ -72,13 +69,10 @@ app.post('/api/persons', (request, response) => {
     .then(savedPerson => {
       response.json(savedPerson);
     })
-    .catch(error => {
-      console.log(error);
-      response.status(500).json({ error: 'Internal Server Error' });
-    });
+    .catch(error => next(error));
 });
 
-app.patch('/api/persons', (request, response) => {
+app.patch('/api/persons', (request, response, next) => {
   const body = request.body;
 
   if (!body.name || !body.number) {
@@ -93,27 +87,10 @@ app.patch('/api/persons', (request, response) => {
         response.status(404).json({ error: 'Person not found' });
       }
     })
-    .catch(error => {
-      console.log(error);
-      response.status(500).json({ error: 'Internal Server Error' });
-    });
+    .catch(error => next(error));
 });
 
-app.get('/info', (request, response) => {
-  Person.countDocuments({}, (error, personCount) => {
-    if (error) {
-      console.log(error);
-      response.status(500).json({ error: 'Internal Server Error' });
-    } else {
-      const currentTime = new Date();
-      const responseText = `
-        <p>Phonebook has info for ${personCount} people</p>
-        <p>${currentTime.toString()}</p>
-      `;
-      response.send(responseText);
-    }
-  });
-});
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
