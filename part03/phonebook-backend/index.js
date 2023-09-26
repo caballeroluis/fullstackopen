@@ -72,14 +72,15 @@ app.post('/api/persons', (request, response, next) => {
     .catch(error => next(error));
 });
 
-app.patch('/api/persons', (request, response, next) => {
+app.put('/api/persons/:id', (request, response, next) => {
+  const id = request.params.id;
   const body = request.body;
 
   if (!body.name || !body.number) {
     return response.status(400).json({ error: 'Name or number missing' });
   }
 
-  Person.findByIdAndUpdate(body.id, { name: body.name, number: body.number }, { new: true })
+  Person.findByIdAndUpdate(id, { name: body.name, number: body.number }, { new: true })
     .then(updatedPerson => {
       if (updatedPerson) {
         response.json(updatedPerson);

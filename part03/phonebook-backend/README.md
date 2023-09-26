@@ -120,3 +120,11 @@ At this stage, ~~you can ignore whether there is already a person in the databas
 Change the backend so that deleting phonebook entries is reflected in the database.
 
 Verify that the frontend still works after making the changes.
+
+# Exercice 3.17*: Phonebook database, step5
+
+If the user tries to create a new phonebook entry for a person whose name is already in the phonebook, the frontend will try to update the phone number of the existing entry by making an HTTP PUT request to the entry's unique URL.
+
+Modify the backend to support this request.
+
+Verify that the frontend works after making your changes.

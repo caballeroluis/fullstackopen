@@ -45,7 +45,7 @@ const App = () => {
       if (confirmUpdate) {
         const updatedPerson = { ...existingPerson, number: newNumber }
   
-        PersonService.update(existingPerson)
+        PersonService.update(existingPerson, updatedPerson)
           .then(() => {
             setPersons(
               persons.map((person) =>
