@@ -128,3 +128,11 @@ If the user tries to create a new phonebook entry for a person whose name is alr
 Modify the backend to support this request.
 
 Verify that the frontend works after making your changes.
+
+# Exercice 3.18*: Phonebook database step6
+
+Also update the handling of the api/persons/:id and info routes to use the database, and verify that they work directly with the browser, Postman, or VS Code REST client.
+
+Inspecting an individual phonebook entry from the browser should look like this:
+
+![image](https://github.com/caballeroluis/fullstackopen/assets/111797757/61a19b93-6950-4098-b7ad-7f6e0a8d1080)
