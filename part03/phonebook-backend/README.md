@@ -167,3 +167,14 @@ Use a Custom validator to implement the second part of the validation.
 If an HTTP POST request tries to add a person with an invalid phone number, the server should respond with an appropriate status code and error message.
 
 ![image](https://github.com/caballeroluis/fullstackopen/assets/111797757/a1381269-805a-4e32-abeb-00ffb83fcf40)
+
+
+# Exercice 3.21 Deploying the database backend to production
+
+Generate a new "full stack" version of the application by creating a new production build of the frontend, and copying it to the backend repository. Verify that everything works locally by using the entire application from the address http://localhost:3001/.
+
+Push the latest version to Fly.io/Render and verify that everything works there as well.
+
+NOTE: you should deploy the BACKEND to the cloud service. If you are using Fly.io the commands should be run in the root directory of the backend (that is, in the same directory where the backend package.json is). In case of using Render, the backend must be in the root of your repository.
+
+You shall NOT be deploying the frontend directly at any stage of this part. It is just backend repository that is deployed throughout the whole part, nothing else.
