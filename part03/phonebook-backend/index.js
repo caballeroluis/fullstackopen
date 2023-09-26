@@ -13,14 +13,13 @@ app.use(express.json());
 app.use(cors());
 app.use(express.static('dist'))
 
-morgan.token('postData', (req, res) => {
+morgan.token('postData', (req) => {
   if (req.method === 'POST' || req.method === 'PUT') {
     return JSON.stringify(req.body);
   } else {
     return '';
   }
 });
-
 
 app.get('/api/persons', (request, response, next) => {
   Person.find({})

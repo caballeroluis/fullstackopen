@@ -20,6 +20,7 @@
     "nodemon": "^3.0.1"
   },
   "devDependencies": {
-    "@flydotio/dockerfile": "^0.4.10"
+    "@flydotio/dockerfile": "^0.4.10",
+    "eslint": "^8.50.0"
   }
 }
