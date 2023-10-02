@@ -61,7 +61,15 @@ const blogs = [
     url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
     likes: 2,
     __v: 0
-  }  
+  },
+  {
+    _id: "5a422bc61b54a676234d17fd",
+    title: "React vs Angular vs Vue",
+    author: "Michael Chan",
+    url: "http://blog.cleancoder.com/uncle-bob/2016/06/26/ReactAngularAndVue.html",
+    likes: 10,
+    __v: 0
+  }
 ]
 
 describe('total likes', () => {
@@ -77,7 +85,7 @@ describe('total likes', () => {
 
   test('of a big list is calculated rigth', () => {
     const result = listHelper.totalLikes(blogs)
-    expect(result).toBe(36)
+    expect(result).toBe(46)
   })
 })
 
@@ -91,6 +99,54 @@ describe('favoritoBlog', () => {
       url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
       likes: 12,
       __v: 0
+    })
+  })
+
+  test('returns null for an empty list', () => {
+    const result = listHelper.favoritoBlog([])
+    expect(result).toBeNull()
+  })
+
+  test('returns the only blog for a list of a single blog', () => {
+    const result = listHelper.favoritoBlog(listWithOneBlog)
+    expect(result).toEqual({
+      _id: '5a422aa71b54a676234d17f8',
+      title: 'Go To Statement Considered Harmful',
+      author: 'Edsger W. Dijkstra',
+      url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+      likes: 5,
+      __v: 0
+    })
+  })
+})
+
+describe('mostBlogs', () => {
+  test('returns the author with the most blogs and their count', () => {
+    const result = listHelper.mostBlogs(blogs)
+    expect(result).toEqual({
+      author: "Robert C. Martin",
+      blogs: 3
+    })
+  })
+
+  test('returns null for an empty list', () => {
+    const result = listHelper.mostBlogs([])
+    expect(result).toBeNull()
+  })
+
+  test('returns the only author and their count for a list of a single blog', () => {
+    const result = listHelper.mostBlogs(listWithOneBlog)
+    expect(result).toEqual({
+      author: 'Edsger W. Dijkstra',
+      blogs: 1
+    })
+  })
+
+  test('returns the author with the most blogs and their count', () => {
+    const result = listHelper.mostBlogs(blogs)
+    expect(result).toEqual({
+      author: 'Robert C. Martin',
+      blogs: 3
     })
   })
 })
