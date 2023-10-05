@@ -25,6 +25,10 @@ app.get('/api/blogs', (request, response) => {
 app.post('/api/blogs', (request, response) => {
   const blog = new Blog(request.body);
 
+  if (!request.body.title || !request.body.url) {
+    return response.status(400).json({ error: 'Title and URL are required' })
+  };
+  
   blog
     .save()
     .then(result => {

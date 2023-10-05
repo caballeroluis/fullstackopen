@@ -72,6 +72,31 @@ test('the "Like" property is 0 by default', async () => {
   expect(savedBlog.likes).toBe(0)
 })
 
+test('400 Bad Request when missing title', async () => {
+  const newBlogWithoutTitle = {
+    author: 'Paco',
+    url: 'https://example.com/4',
+    likes: 8,
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlogWithoutTitle)
+    .expect(400)
+})
+
+test('400 Bad Request when missing URL', async () => {
+  const newBlogWithoutUrl = {
+    title: 'A blog without URL',
+    author: 'Paquito',
+    likes: 8,
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlogWithoutUrl)
+    .expect(400)
+})
 
 afterAll(async () => {
   await mongoose.connection.close()
