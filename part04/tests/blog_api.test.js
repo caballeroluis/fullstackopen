@@ -8,7 +8,7 @@ const api = supertest(app)
 
 beforeEach(async () => {
   await Blog.deleteMany({})
-  await Blog.insertMany(listHelper.blogs);
+  await Blog.insertMany(listHelper.blogs)
 })
 
 test('blogs are returned as json and the correct number of blogs', async () => {
@@ -27,6 +27,32 @@ test('blogs have "id" property instead of "_id"', async () => {
     expect(blog.id).toBeDefined()
     expect(blog._id).toBeUndefined()
   })
+})
+
+test('creating a new blog post', async () => {
+  const newBlog = {
+    title: 'A random blog',
+    author: 'Paquito',
+    url: 'https://example.com/2',
+    likes: 7,
+  }
+
+  const numberOfBlogsBefore = await Blog.find({}).countDocuments()
+
+  const response = await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const numberOfBlogsAfter = await Blog.find({}).countDocuments()
+  expect(numberOfBlogsAfter).toBe(numberOfBlogsBefore + 1)
+
+  const savedBlog = response.body
+  expect(savedBlog.title).toBe(newBlog.title)
+  expect(savedBlog.author).toBe(newBlog.author)
+  expect(savedBlog.url).toBe(newBlog.url)
+  expect(savedBlog.likes).toBe(newBlog.likes)
 })
 
 afterAll(async () => {
