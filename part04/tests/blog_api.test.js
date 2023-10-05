@@ -55,6 +55,24 @@ test('creating a new blog post', async () => {
   expect(savedBlog.likes).toBe(newBlog.likes)
 })
 
+test('the "Like" property is 0 by default', async () => {
+  const newBlogWithoutLikes = {
+    title: 'The blog that nobody likes',
+    author: 'Bob',
+    url: 'https://example.com/3',
+  }
+
+  const response = await api
+    .post('/api/blogs')
+    .send(newBlogWithoutLikes)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const savedBlog = response.body
+  expect(savedBlog.likes).toBe(0)
+})
+
+
 afterAll(async () => {
   await mongoose.connection.close()
 })
