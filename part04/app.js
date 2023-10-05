@@ -36,4 +36,15 @@ app.post('/api/blogs', (request, response) => {
     });
 });
 
+app.delete('/api/blogs/:id', async (request, response) => {
+  const blogId = request.params.id;
+
+  try {
+    await Blog.findByIdAndRemove(blogId);
+    response.status(204).end();
+  } catch (error) {
+    response.status(404).json({ error: 'Blog not found' });
+  }
+});
+
 module.exports = app;

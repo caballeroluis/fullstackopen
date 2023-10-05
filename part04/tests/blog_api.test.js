@@ -98,6 +98,22 @@ test('400 Bad Request when missing URL', async () => {
     .expect(400)
 })
 
+test('deleting a blog by ID', async () => {
+  const blogsAtStart = await Blog.find({})
+  const blogToDelete = blogsAtStart[blogsAtStart.length - 1]
+
+  await api
+    .delete(`/api/blogs/${blogToDelete.id}`)
+    .expect(204)
+
+  const blogsAtEnd = await Blog.find({})
+
+  expect(blogsAtEnd).toHaveLength(blogsAtStart.length - 1)
+
+  const titles = blogsAtEnd.map(blog => blog.title)
+  expect(titles).not.toContain(blogToDelete.title)
+})
+
 afterAll(async () => {
   await mongoose.connection.close()
 })
