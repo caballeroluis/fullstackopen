@@ -32,6 +32,69 @@ describe('when there is initially one user in db', () => {
     const usersAtEnd = await listHelper.usersInDb()
     expect(usersAtEnd).toEqual(usersAtStart)
   })
+
+  test('creation fails with proper statuscode and message if username format is invalid', async () => {
+    const usersAtStart = await listHelper.usersInDb()
+  
+    const newUser = {
+      username: 'ro!@#',
+      name: 'Superuser',
+      password: 'salainen',
+    }
+  
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+  
+    expect(result.body.error).toContain('Invalid username format')
+  
+    const usersAtEnd = await listHelper.usersInDb()
+    expect(usersAtEnd).toEqual(usersAtStart)
+  })
+  
+  test('creation fails with proper statuscode and message if username is too short', async () => {
+    const usersAtStart = await listHelper.usersInDb()
+  
+    const newUser = {
+      username: 'ro',
+      name: 'Superuser',
+      password: 'salainen',
+    }
+  
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+  
+    expect(result.body.error).toContain('Make sure that the username is at least 3 characters long')
+  
+    const usersAtEnd = await listHelper.usersInDb()
+    expect(usersAtEnd).toEqual(usersAtStart)
+  })
+  
+  test('creation fails with proper statuscode and message if password is too short', async () => {
+    const usersAtStart = await listHelper.usersInDb()
+  
+    const newUser = {
+      username: 'root',
+      name: 'Superuser',
+      password: 'sa',
+    }
+  
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+  
+    expect(result.body.error).toContain('Make sure that the password is at least 3 characters long')
+  
+    const usersAtEnd = await listHelper.usersInDb()
+    expect(usersAtEnd).toEqual(usersAtStart)
+  })
 })
 
 afterAll(async () => {
