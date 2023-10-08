@@ -2,6 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 require('dotenv').config();
+const User = require('./models/User');
+const usersRouter = require('./controllers/users');
+const bcrypt = require('bcrypt');
 
 const app = express();
 
@@ -13,6 +16,7 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.use(cors());
 app.use(express.json());
+app.use('/api/users', usersRouter);
 
 app.get('/api/blogs', (request, response) => {
   Blog

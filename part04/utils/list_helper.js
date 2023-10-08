@@ -1,4 +1,5 @@
 const _ = require('lodash')
+const User = require('../models/User')
 
 const dummy = (blogs) => {
   return 1
@@ -76,6 +77,36 @@ const blogs = [
   }
 ]
 
+const users = [
+  {
+    username: 'User_1',
+    name: 'User 1 name',
+    password: '$2b$10$qAUEpsqoo6047bzyC78jYumGAf8ihTNo6gJCOwYhhH6TRBU1Q9XTS',
+    blogs: [
+      '5a422a851b54a676234d17f7',
+      '5a422aa71b54a676234d17f8',
+    ],
+  },
+  {
+    username: 'User_2',
+    name: 'User 2 name',
+    password: '$2b$10$DNDmt3RAETTJ8zfY1S0kpeGL/n060X5P6W71cX2Tvx.j4p8AT0mHm',
+    blogs: [
+      '5a422b3a1b54a676234d17f9',
+      '5a422b891b54a676234d17fa',
+    ],
+  },
+  {
+    username: 'root',
+    name: 'Superuser',
+    password: '$2b$10$m4LTheih2SwhcKprjA9ir.Zg1vSr7wolx0QSoffZWBDEe3DCQ/SY2',
+    blogs: [
+      '5a422a851b54a676234d17f7',
+      '5a422aa71b54a676234d17f8',
+    ],
+  },
+]
+
 const totalLikes = (blogs) => {
   const likes = blogs.reduce((total, blog) => total + blog.likes, 0)
   return likes
@@ -136,6 +167,11 @@ const mostLikes = (blogs) => {
   }
 }
 
+const usersInDb = async () => {
+  const users = await User.find({})
+  return users.map(u => u.toJSON())
+}
+
 module.exports = {
   dummy,
   totalLikes,
@@ -145,4 +181,6 @@ module.exports = {
   listWithoutBlogs,
   listWithOneBlog,
   blogs,
+  usersInDb,
+  users,
 }
