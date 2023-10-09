@@ -27,7 +27,8 @@ describe('favoritoBlog', () => {
       author: "Edsger W. Dijkstra",
       url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
       likes: 12,
-      __v: 0
+      __v: 0,
+      user: "6523bde04556ea3cf0dc3d58"
     })
   })
 
@@ -44,7 +45,8 @@ describe('favoritoBlog', () => {
       author: 'Edsger W. Dijkstra',
       url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
       likes: 5,
-      __v: 0
+      __v: 0,
+      user: "6523bde04556ea3cf0dc3d56"
     })
   })
 })

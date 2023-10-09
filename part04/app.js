@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 const User = require('./models/User');
 const usersRouter = require('./controllers/users');
-const bcrypt = require('bcrypt');
+const users = require('./utils/list_helper');
 
 const app = express();
 
@@ -18,26 +18,22 @@ app.use(cors());
 app.use(express.json());
 app.use('/api/users', usersRouter);
 
-app.get('/api/blogs', (request, response) => {
-  Blog
-    .find({})
-    .then(blogs => {
-      response.json(blogs);
-    })
+app.get('/api/blogs', async (_request, response) => {
+    const blogs = await Blog.find({}).populate('user', { username: 1, name: 1, id: '' });
+    response.json(blogs);
 });
 
-app.post('/api/blogs', (request, response) => {
+app.post('/api/blogs', async (request, response) => {
   const blog = new Blog(request.body);
 
   if (!request.body.title || !request.body.url) {
-    return response.status(400).json({ error: 'Title and URL are required' })
-  };
-  
-  blog
-    .save()
-    .then(result => {
-      response.status(201).json(result);
-    });
+    return response.status(400).json({ error: 'Title and URL are required' });
+  }
+
+  blog.user = '6523bde04556ea3cf0dc3d56';
+
+  const result = await blog.save();
+  response.status(201).json(result);
 });
 
 app.delete('/api/blogs/:id', async (request, response) => {

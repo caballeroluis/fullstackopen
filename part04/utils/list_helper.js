@@ -14,71 +14,14 @@ const listWithOneBlog = [
     author: 'Edsger W. Dijkstra',
     url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
     likes: 5,
-    __v: 0
-  }
-]
-
-const blogs = [
-  {
-    _id: "5a422a851b54a676234d17f7",
-    title: "React patterns",
-    author: "Michael Chan",
-    url: "https://reactpatterns.com/",
-    likes: 7,
-    __v: 0
-  },
-  {
-    _id: "5a422aa71b54a676234d17f8",
-    title: "Go To Statement Considered Harmful",
-    author: "Edsger W. Dijkstra",
-    url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
-    likes: 5,
-    __v: 0
-  },
-  {
-    _id: "5a422b3a1b54a676234d17f9",
-    title: "Canonical string reduction",
-    author: "Edsger W. Dijkstra",
-    url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
-    likes: 12,
-    __v: 0
-  },
-  {
-    _id: "5a422b891b54a676234d17fa",
-    title: "First class tests",
-    author: "Robert C. Martin",
-    url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
-    likes: 10,
-    __v: 0
-  },
-  {
-    _id: "5a422ba71b54a676234d17fb",
-    title: "TDD harms architecture",
-    author: "Robert C. Martin",
-    url: "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
-    likes: 0,
-    __v: 0
-  },
-  {
-    _id: "5a422bc61b54a676234d17fc",
-    title: "Type wars",
-    author: "Robert C. Martin",
-    url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
-    likes: 2,
-    __v: 0
-  },
-  {
-    _id: "5a422bc61b54a676234d17fd",
-    title: "React vs Angular vs Vue",
-    author: "Michael Chan",
-    url: "http://blog.cleancoder.com/uncle-bob/2016/06/26/ReactAngularAndVue.html",
-    likes: 10,
-    __v: 0
+    __v: 0,
+    user: "6523bde04556ea3cf0dc3d56"
   }
 ]
 
 const users = [
   {
+    _id: "6523bde04556ea3cf0dc3d56",
     username: 'User_1',
     name: 'User 1 name',
     password: '$2b$10$qAUEpsqoo6047bzyC78jYumGAf8ihTNo6gJCOwYhhH6TRBU1Q9XTS',
@@ -88,6 +31,7 @@ const users = [
     ],
   },
   {
+    _id: "6523bde04556ea3cf0dc3d57",
     username: 'User_2',
     name: 'User 2 name',
     password: '$2b$10$DNDmt3RAETTJ8zfY1S0kpeGL/n060X5P6W71cX2Tvx.j4p8AT0mHm',
@@ -97,6 +41,7 @@ const users = [
     ],
   },
   {
+    _id: "6523bde04556ea3cf0dc3d58",
     username: 'root',
     name: 'Superuser',
     password: '$2b$10$m4LTheih2SwhcKprjA9ir.Zg1vSr7wolx0QSoffZWBDEe3DCQ/SY2',
@@ -105,6 +50,72 @@ const users = [
       '5a422aa71b54a676234d17f8',
     ],
   },
+]
+
+const blogs = [
+  {
+    _id: "5a422a851b54a676234d17f7",
+    title: "React patterns",
+    author: "Michael Chan",
+    url: "https://reactpatterns.com/",
+    likes: 7,
+    __v: 0,
+    user: users[0]._id
+  },
+  {
+    _id: "5a422aa71b54a676234d17f8",
+    title: "Go To Statement Considered Harmful",
+    author: "Edsger W. Dijkstra",
+    url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
+    likes: 5,
+    __v: 0,
+    user: users[1]._id
+  },
+  {
+    _id: "5a422b3a1b54a676234d17f9",
+    title: "Canonical string reduction",
+    author: "Edsger W. Dijkstra",
+    url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
+    likes: 12,
+    __v: 0,
+    user: users[2]._id
+  },
+  {
+    _id: "5a422b891b54a676234d17fa",
+    title: "First class tests",
+    author: "Robert C. Martin",
+    url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
+    likes: 10,
+    __v: 0,
+    user: users[0]._id
+  },
+  {
+    _id: "5a422ba71b54a676234d17fb",
+    title: "TDD harms architecture",
+    author: "Robert C. Martin",
+    url: "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
+    likes: 0,
+    __v: 0,
+    user: users[1]._id
+  },
+  {
+    _id: "5a422bc61b54a676234d17fc",
+    title: "Type wars",
+    author: "Robert C. Martin",
+    url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
+    likes: 2,
+    __v: 0,
+    user: users[2]._id
+  },
+  {
+    _id: "5a422bc61b54a676234d17fd",
+    title: "React vs Angular vs Vue",
+    author: "Michael Chan",
+    url: "http://blog.cleancoder.com/uncle-bob/2016/06/26/ReactAngularAndVue.html",
+    likes: 10,
+    __v: 0,
+    user: users[0]._id
+  }
 ]
 
 const totalLikes = (blogs) => {
