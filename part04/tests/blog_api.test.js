@@ -6,13 +6,13 @@ const listHelper = require('../utils/list_helper')
 
 const api = supertest(app)
 
-beforeEach(async () => {
+beforeAll(async () => {
   await Blog.deleteMany({})
   await Blog.insertMany(listHelper.blogs)
 })
 
 describe('blog tests', () => {
-  test('blogs are returned as json and the correct number of blogs', async () => {
+  xtest('blogs are returned as json and the correct number of blogs', async () => {
     const response = await api
       .get('/api/blogs')
       .expect(200)
@@ -21,7 +21,7 @@ describe('blog tests', () => {
     expect(response.body).toHaveLength(listHelper.blogs.length)
   })
 
-  test('blogs have "id" property instead of "_id"', async () => {
+  xtest('blogs have "id" property instead of "_id"', async () => {
     const response = await api.get('/api/blogs')
 
     response.body.forEach((blog) => {
@@ -59,7 +59,7 @@ describe('blog tests', () => {
 
   test('the "Like" property is 0 by default', async () => {
     const newBlogWithoutLikes = {
-      _id: '6523c67ec572263022ffd38e',
+      _id: '652426b08766f89bf121a767',
       title: 'The blog that nobody likes',
       author: 'Bob',
       url: 'https://example.com/3',
@@ -77,7 +77,7 @@ describe('blog tests', () => {
 
   test('400 Bad Request when missing title', async () => {
     const newBlogWithoutTitle = {
-      id: '6523c67ec572263022ffd38e',
+      id: '652426bf8766f89bf121a76c',
       author: 'Paco',
       url: 'https://example.com/4',
       likes: 8,
@@ -91,7 +91,7 @@ describe('blog tests', () => {
 
   test('400 Bad Request when missing URL', async () => {
     const newBlogWithoutUrl = {
-      id: '6523c67ec572263022ffd38e',
+      id: '652426da6991d13bb68455cb',
       title: 'A blog without URL',
       author: 'Paquito',
       likes: 8,

@@ -6,7 +6,7 @@ const User = require('../models/User')
 
 const api = supertest(app)
 
-beforeEach(async () => {
+beforeAll(async () => {
   await User.deleteMany({})
   await User.insertMany(listHelper.users)
 })
@@ -94,6 +94,72 @@ describe('when there is initially one user in db', () => {
   
     const usersAtEnd = await listHelper.usersInDb()
     expect(usersAtEnd).toEqual(usersAtStart)
+  })
+})
+
+describe('User Creation and Authentication', () => {
+  let registeredUser = new User()
+  registeredUser.password = 'testpassword'
+
+  test('Create a new user', async () => {
+    const newUser = {
+      username: 'testuser',
+      password: 'testpassword',
+      name: 'Test User',
+    }
+
+    const response = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    expect(response.body.username).toBe(newUser.username)
+  })
+
+  test('Log in with a registered user', async () => {
+    const newUser = {
+      username: 'testuser',
+      password: 'testpassword',
+      name: 'Test User',
+    }
+
+    await api.post('/api/users').send(newUser)
+
+    const loginCredentials = {
+      username: 'testuser',
+      password: 'testpassword',
+    }
+
+    const response = await api
+      .post('/api/login')
+      .send(loginCredentials)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    expect(response.body).toHaveProperty('token')
+
+    registeredUser = { ...registeredUser, ...response.body }
+    registeredUser.token = response.body.token
+  })
+
+  test('Attempt to log in with invalid credentials', async () => {
+    const loginCredentials = {
+      username: 'nonexistentuser',
+      password: 'wrongpassword',
+    }
+
+    await api
+      .post('/api/login')
+      .send(loginCredentials)
+      .expect(401)
+      .expect('Content-Type', /application\/json/)
+  })
+})
+
+describe('Fetching blogs with authenticated user token', () => {
+  test('Failed attempt to fetch blogs without a token', async () => {
+    await api.get('/api/blogs').expect(401)
   })
 })
 

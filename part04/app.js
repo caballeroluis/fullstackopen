@@ -4,7 +4,8 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 const User = require('./models/User');
 const usersRouter = require('./controllers/users');
-const users = require('./utils/list_helper');
+const loginRouter = require('./controllers/login');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 
@@ -17,10 +18,34 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 app.use(cors());
 app.use(express.json());
 app.use('/api/users', usersRouter);
+app.use('/api/login', loginRouter);
 
-app.get('/api/blogs', async (_request, response) => {
+const getTokenFrom = request => {
+  const authorization = request.get('authorization')
+  if (authorization && authorization.startsWith('Bearer ')) {
+    return authorization.replace('Bearer ', '')
+  }
+  return null
+}
+
+app.get('/api/blogs', async (request, response, next) => {
+  try {
+    const token = getTokenFrom(request);
+
+    if (!token) {
+      return response.status(401).json({ error: 'Token missing' });
+    }
+
+    const decodedToken = jwt.verify(token, process.env.SECRET);
+    if (!decodedToken.id) {
+      return response.status(401).json({ error: 'Token invalid' });
+    }
+
     const blogs = await Blog.find({}).populate('user', { username: 1, name: 1, id: '' });
     response.json(blogs);
+  } catch (error) {
+    next(error);
+  }
 });
 
 app.post('/api/blogs', async (request, response) => {
