@@ -48,17 +48,30 @@ app.get('/api/blogs', async (request, response, next) => {
   }
 });
 
-app.post('/api/blogs', async (request, response) => {
-  const blog = new Blog(request.body);
+app.post('/api/blogs', async (request, response, next) => {
+  try {
+    const blog = new Blog(request.body);
 
-  if (!request.body.title || !request.body.url) {
-    return response.status(400).json({ error: 'Title and URL are required' });
-  }
+    const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+    if (!decodedToken.id) {
+      return response.status(401).json({ error: 'token invalid' })
+    }
+    
+    const user = await User.findById(decodedToken.id);
 
-  blog.user = '6523bde04556ea3cf0dc3d56';
+    if (!request.body.title || !request.body.url) {
+      return response.status(400).json({ error: 'Title and URL are required' });
+    }
 
-  const result = await blog.save();
-  response.status(201).json(result);
+    blog.user = user.id;
+
+    const result = await blog.save();
+    user.blogs = user.blogs.concat(result.id);
+    await user.save();
+    response.status(201).json(result);
+  } catch (error) {
+    next(error);
+  };
 });
 
 app.delete('/api/blogs/:id', async (request, response) => {
