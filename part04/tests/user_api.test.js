@@ -151,6 +151,14 @@ describe('Fetching blogs with authenticated user token', () => {
   test('Failed attempt to fetch blogs without a token', async () => {
     await api.get('/api/blogs').expect(401)
   })
+  
+  test('Failed attempt to post blogs without a token', async () => {
+    await api
+      .post('/api/blogs')
+      .send({})
+      .expect(401)
+      .expect('Content-Type', /application\/json/)
+  })
 })
 
 describe('blog tests', () => {

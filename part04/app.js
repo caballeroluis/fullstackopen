@@ -5,6 +5,7 @@ require('dotenv').config();
 const User = require('./models/User');
 const usersRouter = require('./controllers/users');
 const loginRouter = require('./controllers/login');
+const middleware = require('./middleware/middleware');
 const jwt = require('jsonwebtoken');
 
 const app = express();
@@ -17,26 +18,20 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.use(cors());
 app.use(express.json());
+app.use(middleware.tokenExtractor);
 app.use('/api/users', usersRouter);
 app.use('/api/login', loginRouter);
 
-const getTokenFrom = request => {
-  const authorization = request.get('authorization')
-  if (authorization && authorization.startsWith('Bearer ')) {
-    return authorization.replace('Bearer ', '')
-  }
-  return null
-}
 
 app.get('/api/blogs', async (request, response, next) => {
   try {
-    const token = getTokenFrom(request);
+    const token = request.token;
 
     if (!token) {
       return response.status(401).json({ error: 'Token missing' });
     }
 
-    const decodedToken = jwt.verify(token, process.env.SECRET);
+    const decodedToken = jwt.verify(request.token, process.env.SECRET);
     if (!decodedToken.id) {
       return response.status(401).json({ error: 'Token invalid' });
     }
@@ -50,9 +45,15 @@ app.get('/api/blogs', async (request, response, next) => {
 
 app.post('/api/blogs', async (request, response, next) => {
   try {
-    const blog = new Blog(request.body);
+    const token = request.token;
 
-    const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+    if (!token) {
+      return response.status(401).json({ error: 'Token missing' });
+    }
+
+    const blog = new Blog(request.body);
+    
+    const decodedToken = jwt.verify(request.token, process.env.SECRET);
     if (!decodedToken.id) {
       return response.status(401).json({ error: 'token invalid' })
     }
