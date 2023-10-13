@@ -184,8 +184,7 @@ describe('blog tests', () => {
 
   test('creating a new blog post', async () => {
     const newBlog = {
-      id: '6523c67ec572263022ffd38e',
-      title: 'A random blog',
+      title: 'A random blog 2',
       author: 'Paquito',
       url: 'https://example.com/2',
       likes: 7,
@@ -312,13 +311,64 @@ describe('blog tests', () => {
       .expect(201)
       .expect('Content-Type', /application\/json/)
   
-    const blog = await Blog.findById(createBlogResponse.body.id);
+    const blog = await Blog.findById(createBlogResponse.body.id)
   
-    const user = await User.findOne({ username: registeredUser.username });
+    const user = await User.findOne({ username: registeredUser.username })
   
-    expect(blog.user.toString()).toBe(user.id);
-  });
+    expect(blog.user.toString()).toBe(user.id)
+  })
 })
+
+describe('Deleting a user\'s own blog', () => {
+  test('succeeds with status 204 if the user is the owner of the blog', async () => {
+    const user = await User.findOne({ username: registeredUser.username })
+    const newBlog = new Blog({
+      title: 'Deleting? yeah, its My Blog',
+      author: 'Test User',
+      url: 'https://example.com/myblog',
+      user: user._id,
+    })
+
+    await newBlog.save()
+
+    const blogsAtStart = await Blog.find({})
+    const blogToDelete = blogsAtStart.find(blog => blog.user.toString() === user._id.toString())
+
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .set('Authorization', `Bearer ${registeredUser.token}`)
+      .expect(204)
+
+    const blogsAtEnd = await Blog.find({})
+
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length - 1)
+    const titles = blogsAtEnd.map(blog => blog.title)
+    expect(titles).not.toContain(blogToDelete.title)
+  })
+
+  test('fails with status 401 if the user is not the owner of the blog', async () => {
+    const user = await User.findOne({ username: registeredUser.username })
+    const anotherUser = listHelper.users[0]
+
+    const newBlog = new Blog({
+      title: 'Deleting? Not My Blog',
+      author: 'Another User',
+      url: 'https://example.com/notmyblog',
+      user: anotherUser._id,
+    })
+
+    await newBlog.save()
+
+    const blogsAtStart = await Blog.find({})
+    const blogToDelete = blogsAtStart.find(blog => blog.user.toString() === anotherUser._id.toString())
+
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .set('Authorization', `Bearer ${registeredUser.token}`)
+      .expect(401)
+  })
+})
+
 
 afterAll(async () => {
   await mongoose.connection.close()
