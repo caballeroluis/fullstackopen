@@ -182,6 +182,21 @@ describe('blog tests', () => {
     })
   })
 
+  test('creating a new blog without a token should return 401 Unauthorized', async () => {
+    const newBlog = {
+      title: 'A blog without a token',
+      author: 'Paquito',
+      url: 'https://example.com/1',
+      likes: 9,
+    }
+  
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(401)
+      .expect('Content-Type', /application\/json/)
+  })
+
   test('creating a new blog post', async () => {
     const newBlog = {
       title: 'A random blog 2',
